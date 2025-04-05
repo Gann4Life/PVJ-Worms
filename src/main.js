@@ -1,4 +1,5 @@
 import { Application, Graphics } from 'pixi.js';
+import { ExampleEntity } from './entities/exampleEntiy.js';
 
 (async() => {
     const app = new Application();
@@ -10,13 +11,15 @@ import { Application, Graphics } from 'pixi.js';
 
     app.canvas.style.position = 'absolute';
 
-    const rectangle = new Graphics();
-    rectangle.rect(200, 200, 50, 50);
-    rectangle.fill({
-        color: 0xffae00,
-    });
+    // const rectangle = new Graphics();
+    // rectangle.rect(200, 200, 50, 50);
+    // rectangle.fill({
+    //     color: 0xffae00,
+    // });
 
-    app.stage.addChild(rectangle);
+    // app.stage.addChild(rectangle);
+
+    let ent = new ExampleEntity(app);
 
     document.body.appendChild(app.canvas);
 })();
