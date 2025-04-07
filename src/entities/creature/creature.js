@@ -10,7 +10,7 @@ export class Creature extends GameEntity {
         this.sprite = new Graphics().circle(0, 0, 50).fill(0xffffff);
         this.drawDebugLines();
         this.createSegments();
-        app.canvas.addEventListener('pointerdown', (event) => this.onPointerMove(event));
+        app.canvas.addEventListener('pointermove', (event) => this.onPointerMove(event));
     }
 
     createSegments() {
