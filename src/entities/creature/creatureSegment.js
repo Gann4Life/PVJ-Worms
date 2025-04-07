@@ -46,7 +46,7 @@ export class CreatureSegment extends GameEntity {
         let targetPosition = this.nextSegment.connectionPoint();
         let distanceToNextSegment = GameUtils.distanceToVec2Abs(this.sprite.position, targetPosition).magnitude;
         if(distanceToNextSegment > this.dynamicSize){
-            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, targetPosition, 0.25);
+            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, targetPosition, (distanceToNextSegment - this.dynamicSize) / distanceToNextSegment);
         }
 
         this.sprite.rotation = GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, targetPosition.x, targetPosition.y);
