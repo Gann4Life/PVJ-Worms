@@ -1,17 +1,20 @@
-import {Graphics} from "pixi.js";
+import { Graphics } from "pixi.js";
 import { GameEntity } from '../core/gameEntity.js';
 
 export class ExampleEntity extends GameEntity {
     constructor(app) {
         super(app);
 
-        this.sprite = new Graphics();
-        this.sprite.rect(200, 200, 50, 50);
-        this.sprite.fill({
-            color: 0xffae00
-        });
+        this.sprite = new Graphics()
+            .circle(0, 0, 50)
+            .fill(0xff0000);
 
-        app.stage.addChild(this.sprite);
+        app.canvas.addEventListener('pointermove', (event) => {
+            this.sprite.position.x = event.x;
+        })
+
+        this.sprite.position.x = window.innerWidth / 2;
+        this.sprite.position.y = window.innerHeight / 2;
     }
 
     start(){

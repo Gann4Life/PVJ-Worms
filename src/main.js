@@ -1,5 +1,6 @@
 import { Application, Graphics } from 'pixi.js';
 import { ExampleEntity } from './entities/exampleEntiy.js';
+import {Creature} from "./entities/creature/creature";
 
 (async() => {
     const app = new Application();
@@ -19,7 +20,8 @@ import { ExampleEntity } from './entities/exampleEntiy.js';
 
     // app.stage.addChild(rectangle);
 
-    let ent = new ExampleEntity(app);
+    let ent = new Creature(app);
+    app.stage.addChild(ent.sprite);
 
     document.body.appendChild(app.canvas);
 })();
