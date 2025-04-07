@@ -24,6 +24,12 @@ export class CreatureSegment extends GameEntity {
             .stroke(0xffaaea);
         this.drawDebugLines();
         this.nextSegment = this.segmentParams.next;
+
+        this.sprite.eventMode = "static";
+        this.sprite.cursor = "pointer";
+        this.sprite.on('pointerdown', () => {
+            this.nextSegment = undefined;
+        });
     }
 
     start(){
@@ -32,6 +38,8 @@ export class CreatureSegment extends GameEntity {
     }
 
     update(ticker){
+        if(this.nextSegment === undefined) return;
+        super.update(ticker);
         // let distX = this.nextSegment.sprite.position.x - this.sprite.position.x;
         // let distY = this.nextSegment.sprite.position.y - this.sprite.position.y;
         //
