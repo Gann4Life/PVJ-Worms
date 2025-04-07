@@ -1,0 +1,91 @@
+/**
+ * Utility JavaScript file written by Gann4Life in order to work with PIXIJS
+ * which aims to solve general problems that are solved in most game engines
+ * for later reusability - 04.02.2025.
+ */
+export class GameUtils {
+    /**
+     * Linearly interpolates `a` and `b` by `t`.
+     *
+     * The parameter `t` is clamped between 0 and 1.
+     * @param {number} a Start value - If `t` is `0` returns `a`.
+     * @param {number} b End value - If `t` is `1` returns `b`.
+     * @param {number} t Interpolation value between `a` and `b` - If `t` is 0.5 returns the midpoint between `a` and `b`.
+     */
+    static lerp(a, b, t) {
+        t = this.clamp(t, 0, 1);
+        return a + (b - a) * t;
+    }
+
+    /**
+     * Linearly interpolates `a` and `b` x and y values by `t`.
+     *
+     * The parameter `t` is clamped between 0 and 1.
+     * @param a Start position.
+     * @param b End position.
+     * @param t Interpolation value between `a` and `b`.
+     */
+    static lerpVec2(a, b, t){
+        return {
+            x: this.lerp(a.x, b.x, t),
+            y: this.lerp(a.y, b.y, t)
+        }
+    }
+
+    /**
+     * Restricts `value` to be within range of `min` and `max`.
+     * @param {number} value The value that we're going to restrict between `min` and `max` range.
+     * @param {number} min The minimum value to clamp to. If `value` passes this value, returns `min`;
+     * @param {number} max The maximum value to clamp to. If `value` passes this value, returns `max`.
+     */
+    static clamp(value, min, max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    /**
+     * Calculates the rotation in radians to match the direction towards point B from point A.
+     * @param {number} ax Point A's X position.
+     * @param {number} ay Point A's Y position.
+     * @param {number} bx Point B's X position.
+     * @param {number} by Point B's Y position.
+     * @returns
+     */
+    static rotateTowards(ax, ay, bx, by) {
+        let diffX = bx - ax;
+        let diffY = by - ay;
+        return Math.atan2(diffY, diffX);
+    }
+
+    /**
+     *
+     * @param a
+     * @param b
+     */
+    static distanceTo(a, b) {
+        return b - a;
+    }
+
+    static distanceToAbs(a, b){
+        return Math.abs(this.distanceTo(a, b));
+    }
+
+    static distanceToVec2(a, b) {
+        let x = this.distanceTo(a.x, b.x);
+        let y = this.distanceTo(a.y, b.y);
+        let magnitude = Math.sqrt(x * x + y * y);
+
+        return {
+            x: x,
+            y: y,
+            magnitude: magnitude
+        }
+    }
+
+    static distanceToVec2Abs(a, b) {
+        return {
+            x: Math.abs(this.distanceToVec2(a, b).x),
+            y: Math.abs(this.distanceToVec2(a, b).y),
+            magnitude: Math.abs(this.distanceToVec2(a, b).magnitude)
+        }
+    }
+}
