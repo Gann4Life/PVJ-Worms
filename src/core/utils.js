@@ -42,6 +42,13 @@ export class GameUtils {
         return Math.max(min, Math.min(value, max));
     }
 
+    static clampVec2(vector, range){
+        return {
+            x: this.clamp(vector.x, -range, range),
+            y: this.clamp(vector.y, -range, range)
+        }
+    }
+
     /**
      * Calculates the rotation in radians to match the direction towards point B from point A.
      * @param {number} ax Point A's X position.

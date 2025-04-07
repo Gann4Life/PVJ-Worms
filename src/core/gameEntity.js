@@ -22,6 +22,7 @@ export class GameEntity {
     }
 
     update(ticker) {
-
+        this.sprite.position.x = this.sprite.position.x % window.innerWidth;
+        this.sprite.position.y = this.sprite.position.y % window.innerHeight;
     }
 }
