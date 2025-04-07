@@ -1,15 +1,34 @@
-import {GameEntity} from "../../core/gameEntity";
+import { GameEntity } from "../../core/gameEntity";
 import { GameUtils } from "../../core/utils";
-import {Graphics} from "pixi.js";
+import { Graphics } from "pixi.js";
 
 export class CreatureSegment extends GameEntity {
-    constructor(app, nextSegment) {
+    constructor(app, segmentParams) {
         super(app);
+
+        /*  Object properties:
+        {
+            next:
+            id:
+            controller:
+        }
+         */
+        this.segmentParams = segmentParams;
+
+        this.size = 40;
+        this.dynamicSize = this.size - segmentParams.controller.segments.length;
+
         this.sprite = new Graphics()
-            .circle(0, 0, 40, 40)
-            .fill(0xab34ba);
+            .circle(0, 0, this.dynamicSize, this.dynamicSize)
+            .fill(0xab34ba)
+            .stroke(0xffaaea);
         this.drawDebugLines();
-        this.nextSegment = nextSegment;
+        this.nextSegment = this.segmentParams.next;
+    }
+
+    start(){
+        this.debugShape = new Graphics().circle(0, 0, 4).fill(0xffffff);
+        this.app.stage.addChild(this.debugShape);
     }
 
     update(ticker){
@@ -22,11 +41,27 @@ export class CreatureSegment extends GameEntity {
         //     this.sprite.position.y += distY / 4;
         // }
 
-        let distanceToNextSegment = GameUtils.distanceToVec2Abs(this.sprite.position, this.nextSegment.sprite.position).magnitude;
-        if(distanceToNextSegment > 40){
-            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, this.nextSegment.sprite.position, 0.25);
+        this.debugUpdate();
+
+        let targetPosition = this.nextSegment.connectionPoint();
+        let distanceToNextSegment = GameUtils.distanceToVec2Abs(this.sprite.position, targetPosition).magnitude;
+        if(distanceToNextSegment > this.dynamicSize){
+            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, targetPosition, 0.25);
         }
 
-        this.sprite.rotation = GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, this.nextSegment.sprite.position.x, this.nextSegment.sprite.position.y);
+        this.sprite.rotation = GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, targetPosition.x, targetPosition.y);
+    }
+
+    connectionPoint() {
+        let pos = this.sprite.position;
+        let rot = this.sprite.rotation;
+        let r = this.dynamicSize;
+        let x = pos.x + r * Math.cos(rot + GameUtils.deg2rad(180));
+        let y = pos.y + r * Math.sin(rot + GameUtils.deg2rad(180));
+        return { x: x, y: y }
+    }
+
+    debugUpdate(){
+        this.debugShape.position = this.connectionPoint();
     }
 }
