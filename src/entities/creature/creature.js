@@ -10,14 +10,19 @@ export class Creature extends GameEntity {
         this.sprite = new Graphics().circle(0, 0, 50).fill(0xffffff);
         this.drawDebugLines();
         this.createSegments();
-        app.canvas.addEventListener('pointermove', (event) => this.onPointerMove(event));
+        app.canvas.addEventListener('pointerdown', (event) => this.onPointerMove(event));
     }
 
     createSegments() {
         this.segments = [];
         let lastSegment = this;
         for(let i = 0; i < 29; i++){
-            let segment = new CreatureSegment(this.app, lastSegment);
+            let params = {
+                next: lastSegment,
+                id: i,
+                controller: this
+            }
+            let segment = new CreatureSegment(this.app, params);
             this.segments.push(segment);
             this.app.stage.addChild(segment.sprite);
             lastSegment = segment;
@@ -25,10 +30,16 @@ export class Creature extends GameEntity {
     }
 
     start(){
-
+        this.desiredPosition = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }
     }
 
     update(ticker){
+        // this.desiredPosition = GameUtils.lerpVec2(
+        //     this.desiredPosition,
+        //     { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight },
+        //     0.01
+        // );
+
         this.sprite.rotation = GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, this.desiredPosition.x, this.desiredPosition.y);
 
         if(GameUtils.distanceToVec2(this.sprite.position, this.desiredPosition).magnitude > 50) {
@@ -40,5 +51,14 @@ export class Creature extends GameEntity {
 
     onPointerMove(event){
         this.desiredPosition = event;
+    }
+
+    connectionPoint() {
+        let pos = this.sprite.position;
+        let rot = this.sprite.rotation;
+        let r = 50;
+        let x = pos.x + r * Math.cos(rot + GameUtils.deg2rad(180));
+        let y = pos.y + r * Math.sin(rot + GameUtils.deg2rad(180));
+        return { x: x, y: y }
     }
 }

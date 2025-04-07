@@ -88,4 +88,25 @@ export class GameUtils {
             magnitude: Math.abs(this.distanceToVec2(a, b).magnitude)
         }
     }
+
+
+    // radians = degrees * (pi/180)
+    /**
+     * Converts a 360 angle into radians.
+     * @param deg The value in degrees to convert.
+     * @returns {number} The angle converted into radians.
+     */
+    static deg2rad(deg){
+        return deg * (Math.PI / 180);
+    }
+
+    // degrees = radians * (180/pi)
+    /**
+     * Converts a radian value to degrees (0° - 360°).
+     * @param rad The radian value to convert.
+     * @returns {number} The angle converted from radians.
+     */
+    static rad2deg(rad){
+        return rad * (180 / Math.PI);
+    }
 }
