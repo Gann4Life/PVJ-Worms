@@ -1,7 +1,7 @@
 import { Graphics } from "pixi.js";
-import {GameEntity} from "../../core/gameEntity";
+import { GameEntity } from "../../core/gameEntity";
 import { CreatureSegment } from "./creatureSegment";
-import {GameUtils} from "../../core/utils";
+import { GameUtils } from "../../core/utils";
 
 export class Creature extends GameEntity {
     constructor(app) {
@@ -10,85 +10,116 @@ export class Creature extends GameEntity {
         let randomPos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight };
         let zeroPos = {x: 0, y: 0};
 
+        this.segments = [this];
+
+        this.size = 20 + Math.random() * 20; // default 40
+        this.movementSpeed = 2 / this.size;
         this.desiredRotation = 0;
         this.desiredPosition = randomPos;
-        this.sprite = new Graphics().circle(0, 0, 50).fill(0xffffff);
+        this.sprite = new Graphics().circle(0, 0, this.size).fill(0xffffff);
         this.sprite.position = randomPos;
         this.drawDebugLines();
         this.createSegments();
-        app.canvas.addEventListener('pointermove', (event) => this.onPointerMove(event));
+
+        this.sprite.eventMode = "static";
+        this.sprite.cursor = "pointer";
+        this.sprite.on('pointerdown', () => this.addNewSegment());
     }
 
     createSegments() {
-        this.segments = [];
-        let lastSegment = this;
-        for(let i = 0; i < 20; i++){
-            let params = {
-                next: lastSegment,
-                id: i,
-                controller: this
-            }
-            let segment = new CreatureSegment(this.app, params);
-            this.segments.push(segment);
-            this.app.stage.addChild(segment.sprite);
-            lastSegment = segment;
+        for(let i = 0; i < 10; i++){
+            this.addNewSegment();
         }
+    }
+
+    addNewSegment(){
+        let lastSegment = this.segments[this.segments.length - 1];
+        let params = {
+            next: lastSegment,
+            id: this.segments.length,
+            controller: this
+        };
+        let newSegment = new CreatureSegment(this.app, params);
+        this.segments.push(newSegment);
+        this.app.stage.addChild(newSegment.sprite);
+
+        this.adjustSegmentSizes();
+    }
+
+    adjustSegmentSizes(){
+        for(let i = 1; i < this.segments.length; i++){
+            let segment = this.segments[i];
+            segment.adjustSize();
+        }
+    }
+
+    /**
+     * Defines the size based on a segment id, which considers the head size and overall segments count.
+     * @param id
+     * @returns {number}
+     */
+    segmentSize(id) {
+        // return this.size - this.segments.length;
+        // return (this.segments.length / id);
+        // return this.size * (0.5 + Math.cos((id / this.segments.length * 4)));
+        return this.size - this.size * (id / this.segments.length)
+    }
+
+    splitSegmentAtIndex(id){
+        let segment = this.segments[id];
+        segment.nextSegment = undefined;
+        this.segments = this.segments.slice(0, id);
+        this.adjustSegmentSizes();
     }
 
     start(){
     }
 
-    update(ticker){
+    update(ticker) {
         super.update(ticker);
-        // this.desiredPosition = GameUtils.lerpVec2(
-        //     this.desiredPosition,
-        //     { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight },
-        //     0.01
-        // );
-        let debugP = document.getElementById("debug-text");
 
-        let dynamicMotion = (Math.sin((this.sprite.position.x + this.sprite.position.y) / 64) * 15)
-        this.sprite.angle = this.desiredRotation + dynamicMotion;
-        debugP.innerText = `\ndesired angle: ${this.desiredRotation}, \ncurrent angle: ${this.sprite.angle}`;
+        let hasReachedTarget = GameUtils.distanceToVec2(this.sprite.position, this.desiredPosition).magnitude > this.size;
 
-
-        if(GameUtils.distanceToVec2(this.sprite.position, this.desiredPosition).magnitude > 50) {
-            // this.sprite.position = GameUtils.lerpVec2(this.sprite.position, this.desiredPosition, 0.01);
-            // this.sprite.position.x += this.rightDirection().x * (dynamicMotion/5);
-            // this.sprite.position.y += this.rightDirection().y * (dynamicMotion/5);
-            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, this.forwardDirection(), 0.1);
+        if(hasReachedTarget) {
+            this.handleRotation();
+            this.handleMovement();
         }
     }
 
-    onPointerMove(event){
-        this.desiredPosition = event;
-        this.desiredRotation = GameUtils.rad2deg(GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, this.desiredPosition.x, this.desiredPosition.y));
+    handleRotation() {
+        let angleDifference = GameUtils.degDiff(this.sprite.angle, this.desiredRotation);
+        let dynamicMotion = (Math.sin((performance.now()) / (this.size * 8)) * 15);
+        this.sprite.angle += GameUtils.lerp(0, GameUtils.clamp(angleDifference + dynamicMotion, -30, 30), 0.1);
+    }
+
+    handleMovement() {
+        this.sprite.position = GameUtils.lerpVec2(this.sprite.position, this.forwardDirection(), this.movementSpeed);
     }
 
     connectionPoint() {
         let pos = this.sprite.position;
         let rot = this.sprite.rotation;
-        let r = 50;
-        let x = pos.x + r * Math.cos(rot + GameUtils.deg2rad(180));
-        let y = pos.y + r * Math.sin(rot + GameUtils.deg2rad(180));
-        return { x: x, y: y }
+
+        let target = GameUtils.pointAroundCircle(rot, this.size, 180);
+        return GameUtils.sumVec2(pos, target);
     }
 
     forwardDirection() {
         let pos = this.sprite.position;
         let rot = this.sprite.rotation;
-        let r = 50;
-        let x = pos.x + r * Math.cos(rot);
-        let y = pos.y + r * Math.sin(rot);
-        return { x: x, y: y }
+        let target = GameUtils.pointAroundCircle(rot, this.size);
+        return GameUtils.sumVec2(pos, target);
     }
 
     rightDirection(){
         let pos = this.sprite.position;
         let rot = this.sprite.rotation;
-        let r = 1;
-        let x = r * Math.cos(rot + GameUtils.deg2rad(90));
-        let y = r * Math.sin(rot + GameUtils.deg2rad(90));
-        return { x: x, y: y }
+        // let r = 1;
+        // let x = r * Math.cos(rot + GameUtils.deg2rad(90));
+        // let y = r * Math.sin(rot + GameUtils.deg2rad(90));
+        // return { x: x, y: y }
+
+        let target = GameUtils.pointAroundCircle(rot, this.size, 90);
+        return GameUtils.sumVec2(pos, target);
     }
 }

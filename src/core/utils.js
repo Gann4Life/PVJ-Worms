@@ -116,4 +116,40 @@ export class GameUtils {
     static rad2deg(rad){
         return rad * (180 / Math.PI);
     }
+
+    static degDiff(sourceAngle, targetAngle) {
+        let delta = targetAngle - sourceAngle;
+
+        if(delta > 180) delta -= 360;
+        else if(delta < -180) delta += 360;
+
+        return delta;
+    }
+
+
+    /** TODO: Test this feature
+     * Calculates the point of a circle's surface given its angle and radius.
+     * @param radians The rotation value in radians.
+     * @param radius The radius of the circle.
+     * @param offsetDegrees The angle to offset this position in degrees (0-360).
+     * @returns {{x: number, y: number}} Position of circle's surface.
+     */
+    static pointAroundCircle(radians, radius = 50, offsetDegrees = 0){
+        let x = radius * Math.cos(radians + this.deg2rad(offsetDegrees));
+        let y = radius * Math.sin(radians + this.deg2rad(offsetDegrees));
+        return { x: x, y: y }
+    }
+
+    /**
+     * Adds two vectors together.
+     * @param a The first vector
+     * @param b The second vector.
+     * @returns {{x: *, y: *}} Vector `a` + Vector `b`
+     */
+    static sumVec2(a, b){
+        return {
+            x: a.x + b.x,
+            y: a.y + b.y
+        }
+    }
 }

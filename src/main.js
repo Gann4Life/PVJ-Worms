@@ -1,6 +1,8 @@
 import { Application, Graphics } from 'pixi.js';
 import { ExampleEntity } from './entities/exampleEntiy.js';
 import {Creature} from "./entities/creature/creature";
+import {CreaturePlayer} from "./entities/creature/creaturePlayer";
+import {CreatureBot} from "./entities/creature/creatureBot";
 
 (async() => {
     const app = new Application();
@@ -12,16 +14,20 @@ import {Creature} from "./entities/creature/creature";
 
     app.canvas.style.position = 'absolute';
 
-    // const rectangle = new Graphics();
-    // rectangle.rect(200, 200, 50, 50);
-    // rectangle.fill({
-    //     color: 0xffae00,
-    // });
+    const gameEntities = [];
 
-    // app.stage.addChild(rectangle);
+    let player = new CreaturePlayer(app);
+    gameEntities.push(player);
 
-    let ent = new Creature(app);
-    app.stage.addChild(ent.sprite);
+    for(let i = 0; i < 4; i++){
+        let bot = new CreatureBot(app);
+        gameEntities.push(bot);
+    }
+
+    for(let i = 0; i < gameEntities.length; i++){
+        const entity = gameEntities[i];
+        app.stage.addChild(entity.sprite);
+    }
 
     document.body.appendChild(app.canvas);
 })();

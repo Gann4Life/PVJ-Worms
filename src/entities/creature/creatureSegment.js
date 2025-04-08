@@ -14,22 +14,37 @@ export class CreatureSegment extends GameEntity {
         }
          */
         this.segmentParams = segmentParams;
-
-        this.size = 40;
-        this.dynamicSize = this.size - segmentParams.controller.segments.length;
-
+        this.dynamicSize = segmentParams.controller.segmentSize(segmentParams.id);
         this.sprite = new Graphics()
-            .circle(0, 0, this.dynamicSize, this.dynamicSize)
+            .circle(0, 0, this.dynamicSize)
             .fill(0xab34ba)
             .stroke(0xffaaea);
         this.drawDebugLines();
         this.nextSegment = this.segmentParams.next;
+    }
+
+    adjustSize(){
+        let prevPos = this.sprite.position;
+        let prevR = this.sprite.rotation;
+
+        this.dynamicSize = this.segmentParams.controller.segmentSize(this.segmentParams.id);
+
+        this.app.stage.removeChild(this.sprite);
+
+        this.sprite = new Graphics()
+            .circle(0, 0, this.dynamicSize)
+            .fill(0xab34ba)
+            .stroke(0xffaaea);
+        this.sprite.position = prevPos;
+        this.sprite.rotation = prevR;
 
         this.sprite.eventMode = "static";
         this.sprite.cursor = "pointer";
         this.sprite.on('pointerdown', () => {
-            this.nextSegment = undefined;
+            this.segmentParams.controller.splitSegmentAtIndex(this.segmentParams.id);
         });
+
+        this.app.stage.addChild(this.sprite);
     }
 
     start(){
@@ -63,13 +78,11 @@ export class CreatureSegment extends GameEntity {
     connectionPoint() {
         let pos = this.sprite.position;
         let rot = this.sprite.rotation;
-        let r = this.dynamicSize;
-        let x = pos.x + r * Math.cos(rot + GameUtils.deg2rad(180));
-        let y = pos.y + r * Math.sin(rot + GameUtils.deg2rad(180));
-        return { x: x, y: y }
+        let target = GameUtils.pointAroundCircle(rot, this.dynamicSize, 180);
+        return GameUtils.sumVec2(pos, target);
     }
 
     debugUpdate(){
-        this.debugShape.position = this.connectionPoint();
+        // this.debugShape.position =
     }
 }
