@@ -20,7 +20,7 @@ import {CreatureBot} from "./entities/creature/creatureBot";
     gameEntities.push(player);
 
     for(let i = 0; i < 4; i++){
-        let bot = new CreatureBot(app);
+        let bot = new CreatureBot(app, gameEntities);
         gameEntities.push(bot);
     }
 

@@ -4,8 +4,10 @@ import { CreatureSegment } from "./creatureSegment";
 import { GameUtils } from "../../core/utils";
 
 export class Creature extends GameEntity {
-    constructor(app) {
+    constructor(app, world) {
         super(app);
+
+        this.world = world;
 
         let randomPos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight };
         let zeroPos = {x: 0, y: 0};
@@ -84,6 +86,10 @@ export class Creature extends GameEntity {
             this.handleRotation();
             this.handleMovement();
         }
+    }
+
+    eat(predator){
+        console.log("Someone tried to eat a head!");
     }
 
     handleRotation() {
