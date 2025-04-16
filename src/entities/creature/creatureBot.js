@@ -8,13 +8,6 @@ export class CreatureBot extends Creature {
         this.setRandomDesiredPosition();
     }
 
-    drawDebugLines() {
-        super.drawDebugLines();
-
-        this.g = new Graphics();
-        this.app.stage.addChild(this.g);
-    }
-
     update(ticker) {
         super.update(ticker);
         let distanceToTarget = GameUtils.distanceToVec2Abs(this.sprite.position, this.desiredPosition);
@@ -36,13 +29,6 @@ export class CreatureBot extends Creature {
         // if(distanceToTarget.magnitude < this.size){
         //     closestEntity.eat(this);
         // }
-
-        // Debug line that displays where the creatures are trying to move towards
-        this.g.position = this.sprite.position;
-        this.g.clear();
-        let drawPoint = GameUtils.diffVec2(this.desiredPosition, this.sprite.position);
-        this.g.lineTo(drawPoint.x, drawPoint.y).stroke(0xff0000);
-
     }
 
     setRandomDesiredPosition() {

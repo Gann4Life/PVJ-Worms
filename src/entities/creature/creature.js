@@ -27,6 +27,13 @@ export class Creature extends GameEntity {
         this.sprite.on('pointerdown', () => this.addNewSegment());
     }
 
+    drawDebugLines() {
+        super.drawDebugLines();
+
+        this.g = new Graphics();
+        this.app.stage.addChild(this.g);
+    }
+
     createSegments() {
         for(let i = 0; i < 10; i++){
             this.addNewSegment();
@@ -85,6 +92,12 @@ export class Creature extends GameEntity {
             this.handleRotation();
             this.handleMovement();
         }
+
+        // Debug line that displays where the creatures are trying to move towards
+        this.g.position = this.sprite.position;
+        this.g.clear();
+        let drawPoint = GameUtils.diffVec2(this.desiredPosition, this.sprite.position);
+        this.g.lineTo(drawPoint.x, drawPoint.y).stroke(0xff0000);
     }
 
     eat(predator){
