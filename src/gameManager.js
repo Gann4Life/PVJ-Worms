@@ -1,6 +1,7 @@
 import { Application } from "pixi.js";
 import { CreaturePlayer } from "./entities/creature/creaturePlayer";
 import { CreatureBot } from "./entities/creature/creatureBot";
+import {Food} from "./entities/food";
 
 export class GameManager {
     constructor(){
@@ -47,6 +48,9 @@ export class GameManager {
     }
 
     createFood(){
-
+        for(let i = 0; i < 40; i++){
+            let food = new Food(this.app);
+            this.gameEntities.push(food);
+        }
     }
 }
