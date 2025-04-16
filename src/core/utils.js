@@ -84,7 +84,8 @@ export class GameUtils {
         return {
             x: x,
             y: y,
-            magnitude: magnitude
+            magnitude: magnitude,
+            normalized: (magnitude === 0) ? { x: 0, y: 0 } : { x: x / magnitude, y: y / magnitude }
         }
     }
 
@@ -92,7 +93,8 @@ export class GameUtils {
         return {
             x: Math.abs(this.distanceToVec2(a, b).x),
             y: Math.abs(this.distanceToVec2(a, b).y),
-            magnitude: Math.abs(this.distanceToVec2(a, b).magnitude)
+            magnitude: Math.abs(this.distanceToVec2(a, b).magnitude),
+            normalized: this.distanceToVec2(a, b).normalized
         }
     }
 
@@ -163,6 +165,13 @@ export class GameUtils {
         return {
             x: a.x - b.x,
             y: a.y - b.y
+        }
+    }
+
+    static multiplyVec2(a, m){
+        return {
+            x: a.x * m,
+            y: a.y * m
         }
     }
 }

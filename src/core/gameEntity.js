@@ -22,6 +22,9 @@ export class GameEntity {
     }
 
     update(ticker) {
+        // TODO: Dividing the position between update() and render() will allow a proper behaviour without affectin physics.
+        // The graphics will loop over the screen while the world is still simulated out of bounds.
+
         this.sprite.position.x = this.sprite.position.x % window.innerWidth;
         this.sprite.position.y = this.sprite.position.y % window.innerHeight;
     }

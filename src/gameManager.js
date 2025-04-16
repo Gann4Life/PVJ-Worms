@@ -5,6 +5,8 @@ import {Food} from "./entities/food";
 
 export class GameManager {
     constructor(){
+        this.gravity = { x: 0, y: 0 };
+        this.wind = { x: 0, y: 0 };
         this.gameEntities = [];
         this.app = new Application();
         this.setupApp().then(r => this.onAppInitialized());
@@ -49,7 +51,7 @@ export class GameManager {
 
     createFood(){
         for(let i = 0; i < 40; i++){
-            let food = new Food(this.app);
+            let food = new Food(this.app, this);
             this.gameEntities.push(food);
         }
     }
