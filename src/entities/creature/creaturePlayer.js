@@ -9,6 +9,10 @@ export class CreaturePlayer extends Creature {
 
     onPointerMove(event){
         this.desiredPosition = event;
-        this.desiredRotation = GameUtils.rad2deg(GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, this.desiredPosition.x, this.desiredPosition.y));
+        this.desiredRotation = GameUtils.rad2deg(GameUtils.rotateTowards(this.position.x, this.position.y, this.desiredPosition.x, this.desiredPosition.y));
+    }
+
+    render() {
+        super.render();
     }
 }

@@ -18,7 +18,7 @@ export class Creature extends GameEntity {
         this.desiredRotation = 0;
         this.desiredPosition = randomPos;
         this.sprite = new Graphics().circle(0, 0, this.size).fill(0xffffff);
-        this.sprite.position = randomPos;
+        this.position = randomPos;
         this.drawDebugLines();
         this.createSegments();
 
@@ -86,7 +86,7 @@ export class Creature extends GameEntity {
     update(ticker) {
         super.update(ticker);
 
-        let hasReachedTarget = GameUtils.distanceToVec2(this.sprite.position, this.desiredPosition).magnitude > this.size;
+        let hasReachedTarget = GameUtils.distanceToVec2(this.position, this.desiredPosition).magnitude > this.size;
 
         if(hasReachedTarget) {
             this.handleRotation();
@@ -94,10 +94,16 @@ export class Creature extends GameEntity {
         }
 
         // Debug line that displays where the creatures are trying to move towards
-        this.g.position = this.sprite.position;
+        this.g.position = this.position;
         this.g.clear();
-        let drawPoint = GameUtils.diffVec2(this.desiredPosition, this.sprite.position);
+        let drawPoint = GameUtils.diffVec2(this.desiredPosition, this.position);
         this.g.lineTo(drawPoint.x, drawPoint.y).stroke(0xff0000);
+    }
+
+    render()
+    {
+        this.sprite.position = this.position;
+        console.log(this.position);
     }
 
     eat(predator){
@@ -111,11 +117,11 @@ export class Creature extends GameEntity {
     }
 
     handleMovement() {
-        this.sprite.position = GameUtils.lerpVec2(this.sprite.position, this.forwardDirection(), this.movementSpeed);
+        this.position = GameUtils.lerpVec2(this.position, this.forwardDirection(), this.movementSpeed);
     }
 
     connectionPoint() {
-        let pos = this.sprite.position;
+        let pos = this.position;
         let rot = this.sprite.rotation;
 
         let target = GameUtils.pointAroundCircle(rot, this.size, 180);
@@ -123,14 +129,14 @@ export class Creature extends GameEntity {
     }
 
     forwardDirection() {
-        let pos = this.sprite.position;
+        let pos = this.position;
         let rot = this.sprite.rotation;
         let target = GameUtils.pointAroundCircle(rot, this.size);
         return GameUtils.sumVec2(pos, target);
     }
 
     rightDirection(){
-        let pos = this.sprite.position;
+        let pos = this.position;
         let rot = this.sprite.rotation;
         // let r = 1;
         // let x = r * Math.cos(rot + GameUtils.deg2rad(90));

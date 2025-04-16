@@ -23,6 +23,18 @@ export class GameManager {
 
     onAppInitialized() {
         this.setupAllEntities();
+        this.app.ticker.add(() => {
+            this.gameLoop();
+        });
+    }
+
+    gameLoop(){
+        for(let i = 0; i < this.gameEntities.length; i++) {
+            this.gameEntities[i].update(this.app.ticker);
+        }
+        for(let i = 0; i < this.gameEntities.length; i++){
+            this.gameEntities[i].render();
+        }
     }
 
     setupAllEntities(){
@@ -39,13 +51,15 @@ export class GameManager {
 
     createPlayer(){
         let player = new CreaturePlayer(this.app);
-        this.gameEntities.push(player);
+        player.segments.forEach(i => { this.gameEntities.push(i); });
     }
 
     createBots(){
         for(let i = 0; i < 4; i++){
             let bot = new CreatureBot(this.app, this.gameEntities);
-            this.gameEntities.push(bot);
+            bot.segments.forEach(i => {
+                this.gameEntities.push(i);
+            });
         }
     }
 

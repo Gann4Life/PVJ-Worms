@@ -10,10 +10,10 @@ export class CreatureBot extends Creature {
 
     update(ticker) {
         super.update(ticker);
-        let distanceToTarget = GameUtils.distanceToVec2Abs(this.sprite.position, this.desiredPosition);
-        let closestEntity = this.closestSegment();
+        let distanceToTarget = GameUtils.distanceToVec2Abs(this.position, this.desiredPosition);
+        // let closestEntity = this.closestSegment();
         let targetReached = distanceToTarget.magnitude < this.size * 2;
-        this.desiredRotation = GameUtils.rad2deg(GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, this.desiredPosition.x, this.desiredPosition.y));
+        this.desiredRotation = GameUtils.rad2deg(GameUtils.rotateTowards(this.position.x, this.position.y, this.desiredPosition.x, this.desiredPosition.y));
 
         // Keep distance from target
         if(targetReached)
@@ -31,6 +31,10 @@ export class CreatureBot extends Creature {
         // }
     }
 
+    render(){
+        super.render();
+    }
+
     setRandomDesiredPosition() {
         this.desiredPosition = {
             x: Math.random() * window.innerWidth,
@@ -43,7 +47,7 @@ export class CreatureBot extends Creature {
         let distanceToResult;
         for(let i = 0; i < entities.length; i++){
             let entity = entities[i];
-            let distanceToEntity = GameUtils.distanceToVec2Abs(this.sprite.position, entity.sprite.position).magnitude;
+            let distanceToEntity = GameUtils.distanceToVec2Abs(this.position, entity.sprite.position).magnitude;
             let entityIsMine = this.segments.some(segment => segment === entity);
             if(!entityIsMine && (distanceToEntity < distanceToResult || distanceToResult === undefined))
             {
@@ -97,7 +101,7 @@ export class CreatureBot extends Creature {
      * @returns {{x: *|number, y: *|number, magnitude: *|number}}
      */
     isWithinRange(entity, range) {
-        return GameUtils.distanceToVec2Abs(this.sprite.position, entity.sprite.position).magnitude < range;
+        return GameUtils.distanceToVec2Abs(this.position, entity.sprite.position).magnitude < range;
     }
 
     /**

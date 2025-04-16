@@ -5,12 +5,11 @@ import {GameUtils} from "./utils";
 export class PhysicsEntity extends GameEntity {
     constructor(app, gameManager){
         super(app);
-        this.position = { x: 0, y: 0 };
         this.velocity = { x: 0, y: 0 };
         this.acceleration = { x: 0, y: 0 };
         this.friction = 0.98;
         this.mass = 10;
-        this.bounceFactor = 0.5;
+        this.bounceFactor = 1;
 
         this.gameManager = gameManager;
     }
@@ -43,14 +42,25 @@ export class PhysicsEntity extends GameEntity {
         this.render();
     }
 
-    render(){
-        this.sprite.position = this.position;
-    }
-
     bounce(){
         if(this.position.y > this.gameManager.app.canvas.height){
             this.position.y = this.gameManager.app.canvas.height;
             this.velocity.y *= -this.bounceFactor;
+        }
+
+        if(this.position.y < 0) {
+            this.position.y = 0;
+            this.velocity.y *= -this.bounceFactor;
+        }
+
+        if(this.position.x < 0){
+            this.position.x = 0;
+            this.velocity.x *= -this.bounceFactor;
+        }
+
+        if(this.position.x > this.gameManager.app.canvas.width) {
+            this.position.x = this.gameManager.app.canvas.width;
+            this.velocity.x *= -this.bounceFactor;
         }
     }
 }

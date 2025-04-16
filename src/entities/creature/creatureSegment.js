@@ -24,7 +24,7 @@ export class CreatureSegment extends GameEntity {
     }
 
     adjustSize(){
-        let prevPos = this.sprite.position;
+        let prevPos = this.position;
         let prevR = this.sprite.rotation;
 
         this.size = this.segmentParams.controller.segmentSize(this.segmentParams.id);
@@ -35,7 +35,7 @@ export class CreatureSegment extends GameEntity {
             .circle(0, 0, this.size)
             .fill(0xab34ba)
             .stroke(0xffaaea);
-        this.sprite.position = prevPos;
+        this.position = prevPos;
         this.sprite.rotation = prevR;
 
         this.sprite.eventMode = "static";
@@ -64,28 +64,32 @@ export class CreatureSegment extends GameEntity {
     update(ticker){
         if(this.nextSegment === undefined) return;
         super.update(ticker);
-        // let distX = this.nextSegment.sprite.position.x - this.sprite.position.x;
-        // let distY = this.nextSegment.sprite.position.y - this.sprite.position.y;
+        // let distX = this.nextSegment.position.x - this.position.x;
+        // let distY = this.nextSegment.position.y - this.position.y;
         //
         // if(Math.abs(distX) > 50 || Math.abs(distY) > 50)
         // {
-        //     this.sprite.position.x += distX / 4;
-        //     this.sprite.position.y += distY / 4;
+        //     this.position.x += distX / 4;
+        //     this.position.y += distY / 4;
         // }
 
         this.debugUpdate();
 
         let targetPosition = this.nextSegment.connectionPoint();
-        let distanceToNextSegment = GameUtils.distanceToVec2Abs(this.sprite.position, targetPosition).magnitude;
+        let distanceToNextSegment = GameUtils.distanceToVec2Abs(this.position, targetPosition).magnitude;
         if(distanceToNextSegment > this.size){
-            this.sprite.position = GameUtils.lerpVec2(this.sprite.position, targetPosition, (distanceToNextSegment - this.size) / distanceToNextSegment);
+            this.position = GameUtils.lerpVec2(this.position, targetPosition, (distanceToNextSegment - this.size) / distanceToNextSegment);
         }
 
-        this.sprite.rotation = GameUtils.rotateTowards(this.sprite.position.x, this.sprite.position.y, targetPosition.x, targetPosition.y);
+        this.sprite.rotation = GameUtils.rotateTowards(this.position.x, this.position.y, targetPosition.x, targetPosition.y);
+    }
+
+    render() {
+        super.render();
     }
 
     connectionPoint() {
-        let pos = this.sprite.position;
+        let pos = this.position;
         let rot = this.sprite.rotation;
         let target = GameUtils.pointAroundCircle(rot, this.size, 180);
         return GameUtils.sumVec2(pos, target);

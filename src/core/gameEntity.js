@@ -3,6 +3,7 @@ import {Graphics} from "pixi.js";
 export class GameEntity {
     constructor(app) {
         this.app = app;
+        this.position = { x: 0, y: 0 };
         this.sprite = new Graphics().rect(0, 0, 50, 50).fill(0xffffff);
 
         this.start();
@@ -22,10 +23,12 @@ export class GameEntity {
     }
 
     update(ticker) {
-        // TODO: Dividing the position between update() and render() will allow a proper behaviour without affectin physics.
-        // The graphics will loop over the screen while the world is still simulated out of bounds.
 
-        this.sprite.position.x = this.sprite.position.x % window.innerWidth;
-        this.sprite.position.y = this.sprite.position.y % window.innerHeight;
+    }
+
+    render() {
+        this.sprite.position = this.position;
+        // this.sprite.position.x = this.position.x % this.app.canvas.width;
+        // this.sprite.position.y = this.position.y % this.app.canvas.height;
     }
 }
