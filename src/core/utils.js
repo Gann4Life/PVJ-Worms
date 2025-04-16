@@ -152,4 +152,17 @@ export class GameUtils {
             y: a.y + b.y
         }
     }
+
+    /**
+     * Returns the difference between two vectors.
+     * @param a The first vector
+     * @param b The second vector.
+     * @returns {{x: *, y: *}} Vector `a` - Vector `b`
+     */
+    static diffVec2(a, b){
+        return {
+            x: a.x - b.x,
+            y: a.y - b.y
+        }
+    }
 }

@@ -10,7 +10,6 @@ export class Creature extends GameEntity {
         this.world = world;
 
         let randomPos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight };
-        let zeroPos = {x: 0, y: 0};
 
         this.segments = [this];
 
