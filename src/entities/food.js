@@ -5,8 +5,8 @@ import {GameUtils} from "../core/utils";
 import {Creature} from "./creature/creature";
 
 export class Food extends PhysicsEntity {
-    constructor(app, gameManager){
-        super(app, gameManager);
+    constructor(gameManager){
+        super(gameManager);
 
         this.sprite = new Graphics().circle(0, 0, 4).fill(0xffab23);
 

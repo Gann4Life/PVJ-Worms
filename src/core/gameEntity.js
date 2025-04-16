@@ -1,15 +1,11 @@
 import {Graphics} from "pixi.js";
 
 export class GameEntity {
-    constructor(app) {
-        this.app = app;
+    constructor(gameManager) {
+        this.gameManager = gameManager;
         this.position = { x: 0, y: 0 };
         this.sprite = new Graphics().rect(0, 0, 50, 50).fill(0xffffff);
-
         this.start();
-        app.ticker.add((ticker) => {
-            this.update(ticker);
-        });
     }
 
     drawDebugLines(){

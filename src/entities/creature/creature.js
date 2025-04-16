@@ -4,10 +4,8 @@ import { CreatureSegment } from "./creatureSegment";
 import { GameUtils } from "../../core/utils";
 
 export class Creature extends GameEntity {
-    constructor(app, world) {
-        super(app);
-
-        this.world = world;
+    constructor(gameManager) {
+        super(gameManager);
 
         let randomPos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight };
 
@@ -31,7 +29,7 @@ export class Creature extends GameEntity {
         super.drawDebugLines();
 
         this.g = new Graphics();
-        this.app.stage.addChild(this.g);
+        this.gameManager.app.stage.addChild(this.g);
     }
 
     createSegments() {
@@ -47,9 +45,9 @@ export class Creature extends GameEntity {
             id: this.segments.length,
             controller: this
         };
-        let newSegment = new CreatureSegment(this.app, params);
+        let newSegment = new CreatureSegment(this.gameManager, params);
         this.segments.push(newSegment);
-        this.app.stage.addChild(newSegment.sprite);
+        this.gameManager.app.stage.addChild(newSegment.sprite);
 
         this.adjustSegmentSizes();
     }
@@ -98,12 +96,6 @@ export class Creature extends GameEntity {
         this.g.clear();
         let drawPoint = GameUtils.diffVec2(this.desiredPosition, this.position);
         this.g.lineTo(drawPoint.x, drawPoint.y).stroke(0xff0000);
-    }
-
-    render()
-    {
-        this.sprite.position = this.position;
-        console.log(this.position);
     }
 
     eat(predator){

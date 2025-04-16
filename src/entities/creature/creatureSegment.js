@@ -3,8 +3,8 @@ import { GameUtils } from "../../core/utils";
 import { Graphics } from "pixi.js";
 
 export class CreatureSegment extends GameEntity {
-    constructor(app, segmentParams) {
-        super(app);
+    constructor(gameManager, segmentParams) {
+        super(gameManager);
 
         /*  Object properties:
         {
@@ -29,7 +29,7 @@ export class CreatureSegment extends GameEntity {
 
         this.size = this.segmentParams.controller.segmentSize(this.segmentParams.id);
 
-        this.app.stage.removeChild(this.sprite);
+        this.gameManager.app.stage.removeChild(this.sprite);
 
         this.sprite = new Graphics()
             .circle(0, 0, this.size)
@@ -44,21 +44,21 @@ export class CreatureSegment extends GameEntity {
             this.segmentParams.controller.splitSegmentAtIndex(this.segmentParams.id);
         });
 
-        this.app.stage.addChild(this.sprite);
+        this.gameManager.app.stage.addChild(this.sprite);
     }
 
     eat(predator) {
         console.log("eating");
         predator.addNewSegment();
         this.segmentParams.controller.splitSegmentAtIndex(this.segmentParams.id);
-        this.app.stage.removeChild(this.sprite);
+        this.gameManager.stage.removeChild(this.sprite);
         let i = this.segmentParams.controller.world.indexOf(this);
         this.segmentParams.controller.world.slice(i);
     }
 
     start(){
         this.debugShape = new Graphics().circle(0, 0, 4).fill(0xffffff);
-        this.app.stage.addChild(this.debugShape);
+        this.gameManager.app.stage.addChild(this.debugShape);
     }
 
     update(ticker){
@@ -82,10 +82,6 @@ export class CreatureSegment extends GameEntity {
         }
 
         this.sprite.rotation = GameUtils.rotateTowards(this.position.x, this.position.y, targetPosition.x, targetPosition.y);
-    }
-
-    render() {
-        super.render();
     }
 
     connectionPoint() {

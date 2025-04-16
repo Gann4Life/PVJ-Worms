@@ -3,8 +3,8 @@ import {GameUtils} from "../../core/utils";
 import {Graphics} from "pixi.js";
 
 export class CreatureBot extends Creature {
-    constructor(app, world) {
-        super(app, world);
+    constructor(gameManager) {
+        super(gameManager);
         this.setRandomDesiredPosition();
     }
 
@@ -29,10 +29,6 @@ export class CreatureBot extends Creature {
         // if(distanceToTarget.magnitude < this.size){
         //     closestEntity.eat(this);
         // }
-    }
-
-    render(){
-        super.render();
     }
 
     setRandomDesiredPosition() {

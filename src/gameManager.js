@@ -50,13 +50,13 @@ export class GameManager {
     }
 
     createPlayer(){
-        let player = new CreaturePlayer(this.app);
+        let player = new CreaturePlayer(this);
         player.segments.forEach(i => { this.gameEntities.push(i); });
     }
 
     createBots(){
         for(let i = 0; i < 4; i++){
-            let bot = new CreatureBot(this.app, this.gameEntities);
+            let bot = new CreatureBot(this);
             bot.segments.forEach(i => {
                 this.gameEntities.push(i);
             });
@@ -65,7 +65,7 @@ export class GameManager {
 
     createFood(){
         for(let i = 0; i < 40; i++){
-            let food = new Food(this.app, this);
+            let food = new Food(this);
             this.gameEntities.push(food);
         }
     }

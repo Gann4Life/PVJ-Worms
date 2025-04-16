@@ -3,15 +3,13 @@ import {Graphics} from "pixi.js";
 import {GameUtils} from "./utils";
 
 export class PhysicsEntity extends GameEntity {
-    constructor(app, gameManager){
-        super(app);
+    constructor(gameManager){
+        super(gameManager);
         this.velocity = { x: 0, y: 0 };
         this.acceleration = { x: 0, y: 0 };
         this.friction = 0.98;
         this.mass = 10;
         this.bounceFactor = 1;
-
-        this.gameManager = gameManager;
     }
 
     addForce(force){
