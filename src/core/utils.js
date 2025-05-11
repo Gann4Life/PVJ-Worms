@@ -152,4 +152,8 @@ export class GameUtils {
             y: a.y + b.y
         }
     }
+
+    static normalizeAngle(deg) {
+        return ((deg % 360) + 360) % 360;
+    }
 }

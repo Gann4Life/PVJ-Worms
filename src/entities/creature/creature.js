@@ -86,10 +86,19 @@ export class Creature extends GameEntity {
         }
     }
 
+    // handleRotation() {
+    //     let angleDifference = GameUtils.degDiff(this.sprite.angle, this.desiredRotation);
+    //     let dynamicMotion = (Math.sin((performance.now()) / (this.size * 8)) * 15);
+    //     this.sprite.angle += GameUtils.lerp(0, GameUtils.clamp(angleDifference + dynamicMotion, -30, 30), 0.1);
+    // }
+
     handleRotation() {
-        let angleDifference = GameUtils.degDiff(this.sprite.angle, this.desiredRotation);
-        let dynamicMotion = (Math.sin((performance.now()) / (this.size * 8)) * 15);
-        this.sprite.angle += GameUtils.lerp(0, GameUtils.clamp(angleDifference + dynamicMotion, -30, 30), 0.1);
+        const angleDiff = GameUtils.degDiff(this.sprite.angle, this.desiredRotation);
+    
+        const rotationSpeed = 4;
+        const rotationStep = GameUtils.clamp(angleDiff, -rotationSpeed, rotationSpeed);
+    
+        this.sprite.angle += rotationStep;
     }
 
     handleMovement() {
