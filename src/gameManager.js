@@ -61,12 +61,7 @@ export class GameManager {
         this.createPlayer();
         this.createBots();
         this.createFood();
-
-        // Adds created entities to the stage.
-        for(let i = 0; i < this.gameEntities.length; i++){
-            const entity = this.gameEntities[i];
-            this.app.stage.addChild(entity.sprite);
-        }
+        this.addEntitiesToStage();
     }
 
     createPlayer(){
@@ -87,6 +82,13 @@ export class GameManager {
         for(let i = 0; i < 40; i++){
             let food = new Food(this);
             this.gameEntities.push(food);
+        }
+    }
+
+    addEntitiesToStage(){
+        for(let i = 0; i < this.gameEntities.length; i++){
+            const entity = this.gameEntities[i];
+            this.app.stage.addChild(entity.sprite);
         }
     }
 }
