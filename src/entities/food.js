@@ -8,7 +8,7 @@ export class Food extends PhysicsEntity {
     constructor(gameManager){
         super(gameManager);
 
-        this.sprite = new Graphics().circle(0, 0, 4).fill(0xffab23);
+        this.sprite = new Graphics().circle(0, 0, 4).fill(0x8B4513);
 
         let randomPos = { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight };
         this.position = randomPos;
