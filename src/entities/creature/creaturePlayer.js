@@ -28,10 +28,6 @@ export class CreaturePlayer extends Creature {
     }
 
     update(ticker) {
-
-        // Handle keyboard input movement
-        const moveAmount = this.movementSpeed * 10; // Adjust multiplier for good feel
-
         let left = this.keysPressed["ArrowLeft"] ? -1 : 0;
         let right = this.keysPressed["ArrowRight"] ? 1 : 0;
         let up = this.keysPressed["ArrowUp"] ? -1 : 0;
