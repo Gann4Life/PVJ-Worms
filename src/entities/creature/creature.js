@@ -11,6 +11,7 @@ export class Creature extends GameEntity {
 
         this.segments = [this];
 
+        this.isSelectable = true;
         this.size = 20 + Math.random() * 20; // default 40
         this.movementSpeed = 2 / this.size;
         this.desiredRotation = 0;

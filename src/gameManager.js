@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import { CreaturePlayer } from "./entities/creature/creaturePlayer";
 import { CreatureBot } from "./entities/creature/creatureBot";
 import {Food} from "./entities/food";
+import { Cursor } from "./cursor";
 
 export class GameManager {
     constructor(){
@@ -9,27 +10,9 @@ export class GameManager {
         this.wind = { x: 0, y: 0 };
         this.gameEntities = [];
         this.app = new Application();
+        this.cursor = new Cursor(this);
+
         this.setupApp().then(r => this.onAppInitialized());
-
-        this.clicking = false;
-        this.initialClick = { x: 0, y: 0};
-        this.endClick = { x: 0, y: 0};
-
-        window.addEventListener("pointerdown", (event) => {
-            this.initialClick.x = event.x;
-            this.initialClick.y = event.y;
-            this.clicking = true;
-
-            console.log(this.initialClick);
-        });
-
-        window.addEventListener("pointerup", (event) => {
-            this.endClick.x = event.x;
-            this.endClick.y = event.y;
-            this.clicking = false;
-
-            console.log(this.endClick);
-        });
     }
 
     async setupApp() {
