@@ -3,6 +3,7 @@ import { CreaturePlayer } from "./entities/creature/creaturePlayer";
 import { CreatureBot } from "./entities/creature/creatureBot";
 import {Food} from "./entities/food";
 import { Cursor } from "./cursor";
+import {SmcExample} from "./entities/smcExample";
 
 export class GameManager {
     constructor(){
@@ -13,6 +14,7 @@ export class GameManager {
         this.cursor = new Cursor(this);
 
         this.setupApp().then(r => this.onAppInitialized());
+        let smth = new SmcExample(this);
     }
 
     async setupApp() {
