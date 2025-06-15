@@ -7,8 +7,10 @@ export class CreaturePlayer extends Creature {
 
         this.keysPressed = [];
 
-        window.addEventListener('keydown', (event) => this.onKeyDown(event));
-        window.addEventListener('keyup', (event) => this.onKeyUp(event));
+        // Movimiento del jugador con las teclas
+        // window.addEventListener('keydown', (event) => this.onKeyDown(event));
+        // window.addEventListener('keyup', (event) => this.onKeyUp(event));
+
         // window.addEventListener('pointerdown', (event) => console.log(event));
     }
 

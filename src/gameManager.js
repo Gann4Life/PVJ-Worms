@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, TilingSprite, Assets, Container } from "pixi.js";
 import { CreaturePlayer } from "./entities/creature/creaturePlayer";
 import { CreatureBot } from "./entities/creature/creatureBot";
 import {Food} from "./entities/food";
@@ -13,8 +13,56 @@ export class GameManager {
         this.app = new Application();
         this.cursor = new Cursor(this);
 
-        this.setupApp().then(r => this.onAppInitialized());
+        this.keysPressed = {};
+
+        this.world = new Container();
+        this.app.stage.addChild(this.world);
+
+        window.addEventListener("keydown", e => this.keysPressed[e.key] = true);
+        window.addEventListener("keyup", e => this.keysPressed[e.key] = false);
+
+        this.init();
+
+        // this.setupApp().then(r => this.onAppInitialized());
         let smth = new SmcExample(this);
+    }
+
+    handleCameraMovement() {
+        let dx = 0;
+        let dy = 0;
+
+        if (this.keysPressed["ArrowUp"]) dy -= 1;
+        if (this.keysPressed["ArrowDown"]) dy += 1;
+        if (this.keysPressed["ArrowLeft"]) dx -= 1;
+        if (this.keysPressed["ArrowRight"]) dx += 1;
+
+        if (dx !== 0 && dy !== 0) {
+            const length = Math.sqrt(dx * dx + dy * dy);
+            dx /= length;
+            dy /= length;
+        }
+
+        const speed = 10;
+        this.world.x -= dx * speed;
+        this.world.y -= dy * speed;
+    }
+
+    async init() {
+        await this.setupApp();
+        this.background = await this.createBackground(this.app);
+        this.onAppInitialized();
+    }
+
+    async createBackground(app) {
+        const texture = await Assets.load("images/tile-dirt.jpg");
+
+        const background = new TilingSprite({
+            texture,
+            width: app.screen.width * 4,
+            height: app.screen.height * 4,
+        })
+
+        this.world.addChild(background);
     }
 
     async setupApp() {
@@ -29,6 +77,7 @@ export class GameManager {
     onAppInitialized() {
         this.setupAllEntities();
         this.app.ticker.add(() => {
+            this.handleCameraMovement();
             this.gameLoop();
         });
     }
@@ -73,7 +122,7 @@ export class GameManager {
     addEntitiesToStage(){
         for(let i = 0; i < this.gameEntities.length; i++){
             const entity = this.gameEntities[i];
-            this.app.stage.addChild(entity.sprite);
+            this.world.addChild(entity.sprite);
         }
     }
 }

@@ -29,7 +29,7 @@ export class CreatureSegment extends GameEntity {
 
         this.size = this.segmentParams.controller.segmentSize(this.segmentParams.id);
 
-        this.gameManager.app.stage.removeChild(this.sprite);
+        this.gameManager.world.removeChild(this.sprite);
 
         this.sprite = new Graphics()
             .circle(0, 0, this.size)
@@ -44,21 +44,21 @@ export class CreatureSegment extends GameEntity {
             this.segmentParams.controller.splitSegmentAtIndex(this.segmentParams.id);
         });
 
-        this.gameManager.app.stage.addChild(this.sprite);
+        this.gameManager.world.addChild(this.sprite);
     }
 
     eat(predator) {
         console.log("eating");
         predator.addNewSegment();
         this.segmentParams.controller.splitSegmentAtIndex(this.segmentParams.id);
-        this.gameManager.stage.removeChild(this.sprite);
+        this.gameManager.world.removeChild(this.sprite);
         let i = this.segmentParams.controller.world.indexOf(this);
         this.segmentParams.controller.world.slice(i);
     }
 
     start(){
         this.debugShape = new Graphics().circle(0, 0, 4).fill(0xffffff);
-        this.gameManager.app.stage.addChild(this.debugShape);
+        this.gameManager.world.addChild(this.debugShape);
     }
 
     update(ticker){

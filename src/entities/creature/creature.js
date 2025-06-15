@@ -30,7 +30,7 @@ export class Creature extends GameEntity {
         super.drawDebugLines();
 
         this.g = new Graphics();
-        this.gameManager.app.stage.addChild(this.g);
+        this.gameManager.world.addChild(this.g);
     }
 
     createSegments() {
@@ -48,7 +48,7 @@ export class Creature extends GameEntity {
         };
         let newSegment = new CreatureSegment(this.gameManager, params);
         this.segments.push(newSegment);
-        this.gameManager.app.stage.addChild(newSegment.sprite);
+        this.gameManager.world.addChild(newSegment.sprite);
 
         this.adjustSegmentSizes();
     }
