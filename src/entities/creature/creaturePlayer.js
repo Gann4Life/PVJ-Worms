@@ -7,6 +7,26 @@ export class CreaturePlayer extends Creature {
 
         this.keysPressed = [];
 
+        // 1. Get the loaded spritesheet data from the cache.
+        //    Use the same full path we used to load it.
+        const sheet = Assets.get('/pvj-worms/assets/player2/player2.json');
+
+        // 2. Create a normal Sprite from ONE of the textures in the sheet.
+        //    We use Object.values to grab all textures, then pick the first one.
+        //    This proves that the sheet loaded correctly.
+        this.sprite = new Sprite(Object.values(sheet.textures)[0]);
+        
+        // 3. Set the anchor point, as in your example
+        this.sprite.anchor.set(0.5, 1);
+        
+        // 4. Set a starting position so we can see it
+        this.position = { x: 300, y: 300 };
+        this.sprite.x = this.position.x;
+        this.sprite.y = this.position.y;
+        
+        // 5. Add the new sprite to the world container
+        this.gameManager.world.addChild(this.sprite);
+
         // Movimiento del jugador con las teclas
         // window.addEventListener('keydown', (event) => this.onKeyDown(event));
         // window.addEventListener('keyup', (event) => this.onKeyUp(event));

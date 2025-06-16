@@ -49,12 +49,18 @@ export class GameManager {
 
     async init() {
         await this.setupApp();
+
+        await Assets.load([
+            "images/tile-dirt.jpg",
+            "images/player2.json" // Load the spritesheet JSON
+        ]);
+
         this.background = await this.createBackground(this.app);
         this.onAppInitialized();
     }
 
     async createBackground(app) {
-        const texture = await Assets.load("images/tile-dirt.jpg");
+        const texture = await Assets.get("images/tile-dirt.jpg");
 
         const background = new TilingSprite({
             texture,
